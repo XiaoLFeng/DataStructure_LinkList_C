@@ -1,52 +1,193 @@
 /*
- * ä»£ç è¯´æ˜
- * ä»£ç ç”± ç­±é”‹xiao_lfeng ç¼–å†™
- * å…¶å¼€å‘è€…ç”±æ­¤äº’è”ç½‘ICPå¤‡æ¡ˆä½œè€…ç¼–å†™ï¼šç²¤ICPå¤‡2022014822å·
+ * ´úÂëËµÃ÷
+ * ´úÂëÓÉ óã·æxiao_lfeng ±àĞ´
+ * Æä¿ª·¢ÕßÓÉ´Ë»¥ÁªÍøICP±¸°¸×÷Õß±àĞ´£ºÔÁICP±¸2022014822ºÅ
  */
 
 #include <cstdio>
+#include <cstring>
+#include <cstdlib>
 
 typedef struct {
-    char no[8]; //8ä½å­¦å·
-    char name[20]; //å§“å
-    int score; //æˆç»©
+    int no; //8Î»Ñ§ºÅ
+    char name[20]; //ĞÕÃû
+    int score; //³É¼¨
 } Student;
 
 typedef struct Node {
-    Student data; //æ•°æ®åŸŸ
-    struct Node *next; //æŒ‡é’ˆåŸŸ
+    Student data; //Êı¾İÓò
+    struct Node *next; //Ö¸ÕëÓò
 } LNode;
 
-//åˆå§‹åŒ–ä¸€ä¸ªå­¦ç”Ÿä¿¡æ¯é“¾è¡¨ï¼Œæ ¹æ®æŒ‡å®šå­¦ç”Ÿä¸ªæ•°ï¼Œé€ä¸ªè¾“å…¥å­¦ç”Ÿä¿¡æ¯
+//³õÊ¼»¯Ò»¸öÑ§ÉúĞÅÏ¢Á´±í£¬¸ù¾İÖ¸¶¨Ñ§Éú¸öÊı£¬Öğ¸öÊäÈëÑ§ÉúĞÅÏ¢
 void CreatStuList(LNode *&list) {
-    list = new LNode;
+    LNode *p, *temp;
+    int intUser;
+    printf("[INFO] ĞèÒªÌí¼Ó¶àÉÙÓÃ»§£º");
+    scanf_s("%d", &intUser);
+    getchar();
+    p = new LNode;
+    list = p;
+    for (int i = 0; i < intUser; ++i) {
+        temp = new LNode;
+        printf("[INSERT] ÕıÔÚÌí¼ÓµÚ %d ¸öÓÃ»§£º\n", i + 1);
+        printf("\t[INFO] ÇëÊäÈëÑ§ºÅ£º");
+        scanf_s("%d",&temp->data.no);
+        getchar();
+        printf("\t[INFO] ÇëÊäÈëĞÕÃû£º");
+        fgets(temp->data.name, 20, stdin);
+        printf("\t[INFO] ÇëÊäÈë·ÖÊı£º");
+        scanf_s("%d", &temp->data.score);
+        getchar();
+        temp->next = nullptr;
+        p->next = temp;
+        p = p->next;
+    }
+    printf("\n");
 }
 
-//é€ä¸ªæ˜¾ç¤ºå­¦ç”Ÿè¡¨ä¸­æ‰€æœ‰å­¦ç”Ÿçš„ç›¸å…³ä¿¡æ¯
-void show(LNode *&list);
+//Öğ¸öÏÔÊ¾Ñ§Éú±íÖĞËùÓĞÑ§ÉúµÄÏà¹ØĞÅÏ¢
+void show(LNode *list) {
+    int i;
+    printf("[SELECT] Êä³öÁ´±íÖĞËùÓĞÓÃ»§ĞÅÏ¢£º\n");
+    for (i = 0; list->next != nullptr; i++) {
+        list = list->next;
+        printf("\t[INFO] µÚ %d ¸öÓÃ»§£º\n", i+1);
+        printf("\t\tÑ§ºÅ£º%d\n",list->data.no);
+        printf("\t\tĞÕÃû£º%s",list->data.name);
+        printf("\t\t·ÖÊı£º%d\n",list->data.score);
+    }
+    printf("\n");
+}
 
-//æ ¹æ®å§“åè¿›è¡ŒæŸ¥æ‰¾ï¼Œè‹¥å­˜åœ¨åˆ™è¾“å‡ºæ­¤å­¦ç”Ÿçš„ä¿¡æ¯ï¼Œå¹¶è¿”å›é€»è¾‘åºå·ï¼Œå¦åˆ™è¾“å‡ºâ€œæ— æ­¤äººâ€å¹¶è¿”å›0ï¼›
-int findByName(LNode *&list, char name[]);
+//¸ù¾İĞÕÃû½øĞĞ²éÕÒ£¬Èô´æÔÚÔòÊä³ö´ËÑ§ÉúµÄĞÅÏ¢£¬²¢·µ»ØÂß¼­ĞòºÅ£¬·ñÔòÊä³ö¡°ÎŞ´ËÈË¡±²¢·µ»Ø0£»
+int findByName(LNode *list, char name[]) {
+    printf("[SELECT] ÕıÔÚ²éÕÒÓÃ»§\n");
+    for (int i = 0; list->next != nullptr; i++) {
+        list = list->next;
+        if (strcmp(list->data.name,name) == 0) {
+            return i+1;
+        }
+    }
+    return 0;
+}
 
-//è¾“å‡ºé€»è¾‘åºå·posç›¸åº”çš„å­¦ç”Ÿä¿¡æ¯ï¼ˆå­¦å·ï¼Œå§“åï¼Œæˆç»©ï¼‰
-int Position(int pos, LNode *&list);
+//Êä³öÂß¼­ĞòºÅposÏàÓ¦µÄÑ§ÉúĞÅÏ¢£¨Ñ§ºÅ£¬ĞÕÃû£¬³É¼¨£©
+int Position(LNode *list, int pos) {
+    printf("[SELECT] ÕıÔÚ²éÑ¯ÏÂ±êÎª %d µÄÓÃ»§£º\n", pos);
+    for (int i = 0; i <= pos; ++i) {
+        if (list->next == nullptr) {
+            printf("[FAIL] ²éÑ¯Ê§°Ü£¬Ã»ÓĞ¶ÔÓ¦ÏÂ±êÓÃ»§");
+            return 0;
+        }
+        if (i == pos) {
+            printf("\t[SUCCESS] ²éÑ¯³É¹¦£º\n");
+            printf("\t\tÑ§ºÅ£º%d\n",list->data.no);
+            printf("\t\tĞÕÃû£º%s",list->data.name);
+            printf("\t\t·ÖÊı£º%d\n",list->data.score);
+        }
+        list = list->next;
+    }
+    return 1;
+}
 
-//ç»™å®šä¸€ä¸ªå­¦ç”Ÿä¿¡æ¯ï¼Œæ’å…¥åˆ°è¡¨ä¸­æŒ‡å®šçš„ä½ç½®
-int PInsert(int pos, LNode *&list, Student student);
+//¸ø¶¨Ò»¸öÑ§ÉúĞÅÏ¢£¬²åÈëµ½±íÖĞÖ¸¶¨µÄÎ»ÖÃ
+int PInsert(LNode *&list, int pos) {
+    LNode *temp,*p;
+    p = list;
+    for (int i = 0; i < pos; ++i) {
+        if (p->next == nullptr) return 0;
+        p = p->next;
+    }
+    temp = new LNode;
+    printf("[INSERT] ÕıÔÚÌí¼ÓÓÃ»§£º\n");
+    printf("\t[INFO] ÇëÊäÈëÑ§ºÅ£º");
+    scanf_s("%d",&temp->data.no);
+    getchar();
+    printf("\t[INFO] ÇëÊäÈëĞÕÃû£º");
+    fgets(temp->data.name, 20, stdin);
+    printf("\t[INFO] ÇëÊäÈë·ÖÊı£º");
+    scanf_s("%d", &temp->data.score);
+    getchar();
+    temp->next = p->next;
+    p->next = temp;
+    return 1;
+}
 
-// åˆ é™¤æŒ‡å®šä½ç½®çš„å­¦ç”Ÿè®°å½•
-int Delete(int pos, LNode *&list);
+// É¾³ıÖ¸¶¨Î»ÖÃµÄÑ§Éú¼ÇÂ¼
+int Delete(LNode *&list, int pos) {
+    printf("[DELETE] ÕıÔÚÉ¾³ıÏÂ±êÎª %d µÄÓÃ»§£º\n", pos);
+    LNode *p,*temp;
+    p = list;
+    for (int i = 0; i < pos-1; ++i) {
+        if (p->next == nullptr) {
+            printf("[FAIL] É¾³ıÊ§°Ü£¬Ã»ÓĞ¶ÔÓ¦ÏÂ±êÓÃ»§");
+            return 0;
+        }
+        p = p->next;
+    }
+    temp = p->next;
+    p->next = temp->next;
+    free(temp);
+    printf("[SUCCESS] É¾³ı³É¹¦\n");
+    return 1;
+}
 
-//ç»Ÿè®¡è¡¨ä¸­å­¦ç”Ÿäººæ•°
-int Count(LNode *&list);
+//Í³¼Æ±íÖĞÑ§ÉúÈËÊı
+int Count(LNode *list) {
+    int i;
+    for (i = 0; list->next != nullptr; ++i) {
+        list = list->next;
+    }
+    return i;
+}
 
-//é‡Šæ”¾é“¾è¡¨
-void DestroyList(LNode *&list);
+//ÊÍ·ÅÁ´±í
+void DestroyList(LNode *&list) {
+    LNode *temp,*p;
+    temp = list;
+    while (temp->next != nullptr) {
+        p = temp->next;
+        free(temp);
+        temp = p;
+    }
+    free(temp);
+}
 
 
 int main() {
-    // åˆ›å»ºé“¾è¡¨èŠ‚ç‚¹
+    // ´´½¨Á´±í½Úµã
+    char name[20];
     LNode *lNode;
+
     CreatStuList(lNode);
 
+    printf("[SELECT] ÇëÊäÈëĞèÒª²éÑ¯ÓÃ»§Ãû£º");
+    fgets(name,20,stdin);
+    int intName = findByName(lNode, name);
+    if (intName > 0)
+        printf("\t[SUCCESS] ²éÑ¯³É¹¦£¨ÏÂ±ê£©£º%d\n", intName);
+    else
+        printf("\t[FAIL] Ã»ÓĞ¶ÔÓ¦ÓÃ»§\n");
+    printf("\n");
+
+    show(lNode);
+
+    PInsert(lNode,2);
+    printf("\n");
+
+    show(lNode);
+
+    printf("[SELECT] ×Ü¼ÆÑ§ÉúÈËÊı %d ÈË\n", Count(lNode));
+    printf("\n");
+
+    Position(lNode,2);
+    printf("\n");
+
+    Delete(lNode,3);
+    printf("\n");
+
+    show(lNode);
+
+    DestroyList(lNode);
 }
