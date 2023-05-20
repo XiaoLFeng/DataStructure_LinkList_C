@@ -190,4 +190,5 @@ int main() {
     show(lNode);
 
     DestroyList(lNode);
+    system("pause");
 }
